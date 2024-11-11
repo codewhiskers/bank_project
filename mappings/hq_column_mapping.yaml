@@ -1,0 +1,85 @@
+hq_columns:
+  rssd_id:
+    ffiec: "#ID_RSSD"
+    fdic: "FED_RSSD"
+    ncua: "RSSD"
+  org_type:
+    ffiec: "ORG_TYPE_CD"
+    fdic: null
+    ncua: null
+  entity_type:
+    ffiec: "ENTITY_TYPE"
+    fdic: "BKCLASS"
+    ncua: null
+  # charter_authority:
+  #   ffiec: "CHTR_AUTH_CD"
+  #   fdic: "CHARTER"
+  #   ncua: null
+  # frs_member:
+  #   ffiec: "MBR_FRS_IND"
+  #   fdic: null
+  #   ncua: null
+  # primary_insurance:
+  #   ffiec: "INSUR_PRI_CD"
+  #   fdic: null
+  #   ncua: null
+  primary_fed_reg:
+    ffiec: "PRIM_FED_REG"
+    fdic: "REGAGNT"
+    ncua: null
+  ncua_id:
+    ffiec: "ID_NCUA"
+    fdic: null
+    ncua: "CU_NUMBER"
+  fdic_id:
+    ffiec: "ID_FDIC_CERT"
+    fdic: "CERT"
+    ncua: null
+  occ_id:
+    ffiec: "ID_OCC"
+    fdic: null
+    ncua: null
+  # site_id:
+  #   ffiec: null
+  #   fdic: null
+  #   ncua: "SiteId"
+  entity_name:
+    ffiec: "NM_LGL"
+    fdic: "NAME"
+    ncua: "CU_NAME"
+  street_address:
+    ffiec: "STREET_LINE1"
+    fdic: "ADDRESS"
+    ncua: "PhysicalAddressLine1"
+  city:
+    ffiec: "CITY"
+    fdic: "CITY"
+    ncua: "PhysicalAddressCity"
+  state:
+    ffiec: "STATE_ABBR_NM"
+    fdic: "STNAME"
+    ncua: "PhysicalAddressStateCode"
+  zip_code:
+    ffiec: "ZIP_CD"
+    fdic: "ZIP"
+    ncua: "PhysicalAddressPostalCode"
+  country:
+    ffiec: "CNTRY_NM"
+    fdic: null
+    ncua: "PhysicalAddressCountry"
+  date_start:
+    ffiec: "D_DT_START"
+    fdic: null
+    ncua: null
+  date_end:
+    ffiec: "D_DT_END"
+    fdic: null
+    ncua: null
+  # active_status:
+  #   ffiec: null
+  #   fdic: "ACTIVE"
+  #   ncua: null
+  # office_type: 
+  #   ffiec: null
+  #   fdic: null
+  #   ncua: "SiteTypeName"

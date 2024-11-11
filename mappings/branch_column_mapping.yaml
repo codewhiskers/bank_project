@@ -1,0 +1,109 @@
+branch_fields:
+  # fdic_id:
+  #   ncua: null
+  #   fdic: "CERT"
+  # ncua_id:
+  #   ncua: "CU_NUMBER"
+  #   fdic: null
+  rssd_id:
+    ncua: null
+    fdic: null
+  branch_id:
+    ncua: "SiteId"
+    fdic: "OFFNUM"
+  institution_id:
+    ncua: "CU_NUMBER"
+    fdic: "CERT"
+  institution_name:
+    ncua: "CU_NAME"
+    fdic: "NAME"
+  branch_name:
+    ncua: "SiteName"
+    fdic: "OFFNAME"
+  branch_type:
+    ncua: "SiteTypeName"
+    fdic: "SERVTYPE"
+  # main_office_indicator:
+  #   ncua: "MainOffice"
+  #   fdic: "MAINOFF"
+  address_line1:
+    ncua: "PhysicalAddressLine1"
+    fdic: "ADDRESS"
+  address_line2:
+    ncua: "PhysicalAddressLine2"
+    fdic: null
+  city:
+    ncua: "PhysicalAddressCity"
+    fdic: "CITY"
+  state:
+    ncua: "PhysicalAddressStateCode"
+    fdic: "STALP"
+  zip_code:
+    ncua: "PhysicalAddressPostalCode"
+    fdic: "ZIP"
+  # county_name:
+  #   ncua: "PhysicalAddressCountyName"
+  #   fdic: "COUNTY"
+  country:
+    ncua: "PhysicalAddressCountry"
+    fdic: null
+  source: 
+    ncua: null
+    fdic: null
+  # mailing_address_line1:
+  #   ncua: "MailingAddressLine1"
+  #   fdic: null
+  # mailing_address_line2:
+  #   ncua: "MailingAddressLine2"
+  #   fdic: null
+  # mailing_city:
+  #   ncua: "MailingAddressCity"
+  #   fdic: null
+  # mailing_state_code:
+  #   ncua: "MailingAddressStateCode"
+  #   fdic: null
+  # mailing_state_name:
+  #   ncua: "MailingAddressStateName"
+  #   fdic: null
+  # mailing_zip_code:
+  #   ncua: "MailingAddressPostalCode"
+  #   fdic: null
+  # phone_number:
+  #   ncua: "PhoneNumber"
+  #   fdic: null
+  # hours_of_operation:
+  #   ncua: "HoursOfOperation"
+  #   fdic: null
+  # member_services:
+  #   ncua: "MemberServices"
+  #   fdic: null
+  # atm:
+  #   ncua: "ATM"
+  #   fdic: null
+  # drive_thru:
+  #   ncua: "DriveThru"
+  #   fdic: null
+  # shared_service_center:
+  #   ncua: "Shrd_Serv_Cntr_Net"
+  #   fdic: null
+  # cbsa:
+  #   ncua: null
+  #   fdic: "CBSA_NO"
+  # cbsa_name:
+  #   ncua: null
+  #   fdic: "CBSA_METRO_NAME"
+  # msa:
+  #   ncua: null
+  #   fdic: "CSA_NO"
+  # msa_name:
+  #   ncua: null
+  #   fdic: "CSA"
+  # establishment_date:
+  #   ncua: null
+  #   fdic: "ESTYMD"
+  # uninum:
+  #   ncua: null
+  #   fdic: "UNINUM"
+  run_date:
+    ncua: "CYCLE_DATE"
+    fdic: "RUNDATE"
