@@ -2,7 +2,8 @@ import pandas as pd
 import yaml
 import pdb
 import hashlib
-
+# import networkx as nx
+import json
 
 class IngestFFIECData:
     def __init__(self):
@@ -141,7 +142,60 @@ class IngestFFIECData:
         df_ncua.drop_duplicates(['branch_id'], inplace=True) # log this
         return df_ncua
         
+    def create_adjacency_matrix(self, df_hq):
+        df_hq_relationships = pd.read_csv('data/ffiec_data/CSV_RELATIONSHIPS.csv')
+        # remove parents that no longer exist in the HQ data (expired most likely)
+        df_hq_relationships = df_hq_relationships[df_hq_relationships['#ID_RSSD_PARENT'].isin(df_hq['rssd_id'])]
+        df_hq_relationships = df_hq_relationships[['#ID_RSSD_PARENT', 'ID_RSSD_OFFSPRING']].drop_duplicates()
+        # Step 1: Create a list of all unique entities from both columns
+        all_entities = pd.concat([df_hq_relationships['#ID_RSSD_PARENT'], df_hq_relationships['ID_RSSD_OFFSPRING']]).unique()
+
+        # Step 2: Create a new dataframe representing the adjacency list
+        # Initialize entity_id and parent_id columns
+        adjacency_list_df = pd.DataFrame({'ID_RSSD': all_entities})
+
+        # Step 3: Merge the original data to create the parent-child relationship
+        adjacency_list_df = adjacency_list_df.merge(
+            df_hq_relationships,
+            left_on='ID_RSSD',
+            right_on='ID_RSSD_OFFSPRING',
+            how='left'
+        )
+
+        # Rename the columns for clarity
+        adjacency_list_df = adjacency_list_df.rename(columns={'#ID_RSSD_PARENT': 'ID_RSSD_PARENT'}).drop(columns=['ID_RSSD_OFFSPRING'])
+
+        # Fill NaN values for entities that have no parent (i.e., root entities)
+        # adjacency_list_df['parent_id'] = adjacency_list_df['parent_id'].fillna('root')
+        # adjacency_list_df.replace('None', None, inplace=True)
+        adjacency_list_df['ID_RSSD'] = adjacency_list_df['ID_RSSD'].astype(float)
+        adjacency_list_df['ID_RSSD_PARENT'] = adjacency_list_df['ID_RSSD_PARENT'].astype(float)
+        adjacency_list_df = adjacency_list_df.rename(columns={
+            'ID_RSSD': 'rssd_id',
+            'ID_RSSD_PARENT': 'rssd_id_parent'
+        })
+        adjacency_list_df.to_csv('data/test_data/relationships.csv', index=False)
+        # Create a directed NetworkX graph
+        # (Your existing code to create adjacency_list_df and NetworkX graph)
+        G = nx.DiGraph()
+
+        for _, row in adjacency_list_df.iterrows():
+            entity = row['rssd_id']
+            parent = row['rssd_id_parent']
+            
+            G.add_node(entity)
+            if pd.notna(parent):
+                G.add_edge(parent, entity)
+
+        # Convert NetworkX graph to node-link data for D3.js
+        graph_data = nx.node_link_data(G)
+
+        # Save the graph data as JSON
+        with open('data/test_data/graph_data.json', 'w') as f:
+            json.dump(graph_data, f)
+                 
     def run(self):
+        
         df_ffiec_hq, _ = self.load_ffiec_data()
         df_fdic_hq, df_fdic_branch = self.load_fdic_data()
         df_ncua_hq, df_ncua_branch = self.load_ncua_data()  
@@ -152,8 +206,13 @@ class IngestFFIECData:
         
         df_branch = pd.concat([df_fdic, df_ncua])
         df_branch = df_branch[[*self.branch_column_mappings.keys()]]
-        df = pd.merge(df_hq, df_branch, on='rssd_id', how='left', indicator=True)
+        
+        df_hq = df_hq.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+        df_branch = df_branch.applymap(lambda x: x.strip() if isinstance(x, str) else x)
         pdb.set_trace()
+        # df = pd.merge(df_hq, df_branch, on='rssd_id', how='left', indicator=True)
+        
+        self.create_adjacency_matrix(df_hq)
         '''
         For now, I'm going to only use the df_fdic, df_ncua data for
         branch data. I'll use the df_ffiec_hq data for the HQ data.

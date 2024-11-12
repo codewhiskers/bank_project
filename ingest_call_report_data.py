@@ -1,5 +1,6 @@
 import pandas as pd
 import yaml
+import json
 import pdb
 import hashlib
 import os
@@ -37,12 +38,13 @@ class IngestCallReportData:
                 final_df = df  
             else:
                 final_df = pd.merge(final_df, df, how='outer', on='IDRSSD')
+            data_dictionary.update(data)
         final_df['date'] = dated_directory
         return final_df, data_dictionary, invalid_rows_all
         
     def read_data(self):
         final_df = pd.DataFrame()
-        data_dictionary = {}
+        data_dictionary_all = {}
         invalid_rows_all = []
         directories_by_date = os.listdir('data/ffiec_data/call_reports')
         for dated_directory in directories_by_date:
@@ -50,8 +52,13 @@ class IngestCallReportData:
             files = [x for x in files if 'Readme' not in x]
             df, data_dictionary, invalid_rows = self.process_files(files, dated_directory)
             final_df = pd.concat([final_df, df])
-            data_dictionary.update(data_dictionary)
+            data_dictionary_all.update(data_dictionary)
             invalid_rows_all.extend(invalid_rows)
+            
+        with open('data/test_data/data_dictionary.json', 'w') as f:
+            json.dump(data_dictionary_all, f, indent=4)
+        
+        final_df.reset_index(drop=True, inplace=True)
         pdb.set_trace()
             
 
@@ -145,7 +152,7 @@ class IngestCallReportData:
            
         ]
         ########################
-        df = pd.read_csv('data_all.csv',
+        df = pd.read_csv('data/test_data/df_call_report_all.csv',
                          usecols=columns_to_keep,
                          dtype={'IDRSSD': int})
         columns_to_convert = [x for x in df.columns if x != 'IDRSSD']
@@ -158,7 +165,7 @@ class IngestCallReportData:
     
 if __name__ == '__main__':
     icrd = IngestCallReportData()
-    icrd.read_ingested_data()
+    icrd.read_data()
     
     
         # # pdb.set_trace()
