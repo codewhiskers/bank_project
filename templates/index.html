@@ -9,33 +9,138 @@
     <link rel="stylesheet" href="static/css/datatable.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <style>
+        /* Styling for the tab container and buttons */
+        .tab-container {
+            display: flex;
+            cursor: pointer;
+            margin-bottom: 10px;
+            user-select: none;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background-color: #f1f1f1;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            margin-right: 5px;
+        }
+
+        .tab.active {
+            background-color: #ffffff;
+            border-bottom: 1px solid white;
+            /* To make active tab blend with content */
+        }
+
+        /* Styling for DataTable containers */
+        .datatable-container {
+            display: none;
+            width: 100%;
+            /* Hide by default */
+        }
+
+        .datatable-container.active {
+            display: block;
+            /* Show active container */
+        }
+    </style>
 </head>
 
 <body>
     <!-- Main Dashboard Container -->
     <div class="dashboard-container">
         <!-- DataTable Section -->
-        <div class="datatable-container">
-            <table id="datatable" class="display compact cell-border" style="width:100%">
+        <div class="tab-container">
+            <div class="tab active" data-target="#datatable-container-1">DataTable 1</div>
+            <div class="tab" data-target="#datatable-container-2">DataTable 2 (Empty)</div>
+        </div>
+        <div id="datatable-container-1" class="datatable-container active">
+
+
+            <table id="datatable-1" class="display compact cell-border" style="width:100%">
                 <thead>
-                    <tr id="table-head"></tr> <!-- Row for column headers -->
-                    <tr id="filter-row"></tr> <!-- Row for filter inputs (new) -->
+                    <tr id="table-head-1"></tr> <!-- Row for column headers -->
+                    <tr id="filter-row-1"></tr> <!-- Row for filter inputs (new) -->
                 </thead>
                 <tbody>
                     <!-- Rows will be added dynamically by DataTables -->
                 </tbody>
             </table>
-
         </div>
+        <div id="datatable-container-2" class="datatable-container">
+            <table id="datatable-2" class="display compact cell-border" style="width:100%">
+                <thead>
+                    <tr id="table-head-2"></tr> <!-- Row for column headers -->
+                    <tr id="filter-row-2"></tr> <!-- Row for filter inputs (new) -->
+                </thead>
+                <tbody>
+                    <!-- Rows will be added dynamically by DataTables -->
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-        <!-- Placeholder sections for additional charts or visualizations -->
-        <div class="chart">Chart 1</div>
-        <div class="chart">Chart 2</div>
-        <div class="chart">Chart 3</div>
-        <div class="chart">Chart 4</div>
+    <!-- Placeholder sections for additional charts or visualizations -->
+    <div class="chart">Chart 1</div>
+    <div class="chart">Chart 2</div>
+    <div class="chart">Chart 3</div>
+    <div class="chart">Chart 4</div>
     </div>
 
     <script src="{{ url_for('static', filename='js/datatable.js') }}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Mapping for custom display names for columns
+            const columnTitleMap_1 = {
+                'entity_type': 'Entity Type',
+                'rssd_id': 'RSSD ID',
+                'entity_name': 'Entity Name',
+                'city': 'City',
+                'state': 'State',
+            };
+            const columnTitleMap_2 = {
+                'rssd_id': 'RSSD ID',
+                'state': 'State',
+            };
+
+            // Initialize DataTables with callbacks
+            DataTableManager.initializeDataTable('/data1', 'datatable-1', 'table-head-1', 'filter-row-1', columnTitleMap_1, function (datatable) {
+                console.log('datatable1 initialized:', datatable);
+            });
+            DataTableManager.initializeDataTable('/data2', 'datatable-2', 'table-head-2', 'filter-row-2', columnTitleMap_2, function (datatable) {
+                console.log('datatable2 initialized:', datatable);
+            });
+
+            // Handle tab switching without reinitializing a DataTable
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function () {
+                    // Remove active class from all tabs and containers
+                    tabs.forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.datatable-container').forEach(container => container.classList.remove('active'));
+
+                    // Add active class to the clicked tab and corresponding container
+                    tab.classList.add('active');
+                    const target = document.querySelector(tab.dataset.target);
+
+                    target.classList.add('active');
+                    if (target.id == 'datatable-container-1') {
+                        DataTableManager.getInstance('datatable-1').columns.adjust().draw();
+                    } else {
+                        DataTableManager.getInstance('datatable-2').columns.adjust().draw();
+                    }
+                    // Get the table ID from the active container
+                    const tableId = target.querySelector('table').id;
+
+                    // Adjust the column widths for the visible DataTable using DataTableManager
+                    const dataTable = DataTableManager.getInstance(tableId);
+                    if (dataTable) {
+                        dataTable.columns.adjust().draw();
+                    }
+                });
+            });
+        });
+    </script>
 
 
 </body>
