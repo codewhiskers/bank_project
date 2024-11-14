@@ -2,48 +2,25 @@
 .datatable-container {
     grid-column: span 2;
     display: flex;
-    /* justify-content: center; */
     align-items: center;
-    width: 100%;
-    overflow: hidden;
-    /* Prevent overflow */
+    justify-content: center;
+    padding: 20px;
+    border-radius: 20px;
+    border: 2px solid black;
+    font-size: 0.85rem;
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    /* Matches the general look of the DataTables examples */
+    /* background-color: #121212; */
+    font-family: Arial, Helvetica, sans-serif; /* Keep a modern sans-serif font */
 }
-
-/* DataTable styling */
-/* #example_wrapper { */
-    /* width: 100%; */
-    /* overflow-x: auto; */
-    /* Allow horizontal scrolling for DataTable */
-/* } */
-
-/* #example { */
-    /* width: 100% !important; */
-    /* max-width: 100%; */
-    /* font-size: 0.9rem; */
-    /* Let columns automatically adjust width */
-/* } */
-
-/* Reduce padding and margin of table cells */
-/* #example td, */
-/* #example th { */
-    /* padding: 4px; */
-    /* Reduce padding to make cells smaller */
-    /* text-align: center;  Center align to make it visually balanced */
-/* } */
 
 #table-head th {
-    /* background-color: #f5f5f5; */
-    /* font-weight: 500; */
-    padding: 5px 0px 5px 0px;
+    padding: 50px 0px 10px 0px;
 }
 
-/* #example tfoot th input { */
-    /* width: 100%; */
-    /* padding: 4px; */
-    /* box-sizing: border-box; */
-/* } */
+
+
+
+
+
